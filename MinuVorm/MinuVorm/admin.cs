@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,9 @@ namespace MinuVorm
         Button valju;
         Button valjuf;
         Button naita;
+        Button film_kustuta;
+        Button fail_lisa;
+        Button film_lisa;
         Button film_uuenda;
         static string conn = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\Source\Repos\form\MinuVorm\MinuVorm\AppData\Ostpilet.mdf;Integrated Security=True";
         SqlConnection connect = new SqlConnection(conn);
@@ -46,6 +50,30 @@ namespace MinuVorm
             };
             this.Controls.Add(film_uuenda);
             film_uuenda.Click += Film_uuenda_Click;
+            film_kustuta = new Button
+            {
+                Location = new System.Drawing.Point(650, 100),
+                Size = new System.Drawing.Size(80, 25),
+                Text = "Kustutamine",
+            };
+            this.Controls.Add(film_kustuta);
+
+            fail_lisa = new Button
+            {
+                Location = new System.Drawing.Point(650, 125),
+                Size = new System.Drawing.Size(80, 25),
+                Text = "Faili valimine",
+            };
+            this.Controls.Add(fail_lisa);
+            fail_lisa.Click += Fail_lisa_Click;
+            film_lisa = new Button
+            {
+                Location = new System.Drawing.Point(650, 150),
+                Size = new System.Drawing.Size(80, 25),
+                Text = "Lisamine",
+            };
+            this.Controls.Add(film_lisa);
+            film_lisa.Click += Film_lisa_Click;
         }
         int Id;
         private void Film_uuenda_Click(object sender, EventArgs e)
@@ -74,7 +102,69 @@ namespace MinuVorm
             }
 
         }
+        SaveFileDialog save;
+        private void Fail_lisa_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog open = new OpenFileDialog();
+            open.Filter = "Image Files(*.jpeg;*.bmp;*.png;*.jpg)|*.jpeg;*.bmp;*.png;*.jpg";
+            open.InitialDirectory = Path.GetFullPath(@"C:\Users\marina.oleinik\Pictures\Filmid");//kust
+            if (open.ShowDialog() == DialogResult.OK)
+            {
+                save = new SaveFileDialog();
+                //save.FileName = poster_txt.Text;
+                save.Filter = "Image Files(*.jpeg;*.bmp;*.png;*.jpg)|*.jpeg;*.bmp;*.png;*.jpg";
+                save.InitialDirectory = Path.GetFullPath(@"..\..\Posterid");//kuhu
 
+                if (save.ShowDialog() == DialogResult.OK)
+                {
+                    File.Copy(open.FileName, save.FileName);
+                    save.RestoreDirectory = true;
+                    poster.Image = Image.FromFile(save.FileName);
+                    film_txt.Text = Path.GetFileNameWithoutExtension(save.FileName);
+                    poster_txt.Text = Path.GetFileNameWithoutExtension(save.FileName) + ".JPG";
+                }
+
+            }
+        }
+
+
+
+
+
+        private void Film_lisa_Click(object sender, EventArgs e)
+        {
+            if (film_txt.Text != "" && aasta_txt.Text != "" && poster_txt.Text != "")
+            {
+                try
+                {
+                    connect.Open();
+                    command = new SqlCommand("INSERT INTO Filmid(Filmi_nimetus,Aasta,Poster) VALUES(@film,@aasta,@poster)", connect);
+
+                    command.Parameters.AddWithValue("@film", film_txt.Text);
+                    command.Parameters.AddWithValue("@aasta", aasta_txt.Text);
+                    command.Parameters.AddWithValue("@poster", poster_txt.Text);
+
+                    //string file_pilt = poster_txt.Text + ".jpg";
+                    //command.Parameters.AddWithValue("@pilt", file_pilt);
+
+                    command.ExecuteNonQuery();
+                    connect.Close();
+                    Data();
+                    ClearData();
+                    MessageBox.Show("Andmed on lisatud");
+                }
+                catch (Exception)
+                {
+
+                    MessageBox.Show("Viga lisamisega");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Viga else");
+            }
+        }
+        
         private void Pilet_naita_Click(object sender, EventArgs e)
         {
             connect.Open();
@@ -155,7 +245,7 @@ namespace MinuVorm
         private void Valjuf_Click(object sender, EventArgs e)
         {
             film_uuenda.Visible = false;
-            dataGridView.Hide();
+            dataGridView.Visible=false;
             poster.Hide();
             film_txt.Hide();
             aasta_txt.Hide();
