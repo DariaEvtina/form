@@ -89,9 +89,9 @@ namespace MinuVorm
                 read_kohad = f.ReadToEnd().Split(';');
                 f.Close();*/
                 connect.Open();
-                adapter = new SqlDataAdapter("SELECT * FROM piletid WHERE saal=@Saal ANF filmID=@filmid", connect);
-                command.Parameters.AddWithValue("@Saal", saalValik);
-                command.Parameters.AddWithValue("@filmid", filmValik);
+                adapter = new SqlDataAdapter("SELECT * FROM piletid WHERE saalID=@saalID ANF filmID=@filmID", connect);
+                command.Parameters.AddWithValue("@saalID", saalValik);
+                command.Parameters.AddWithValue("@filmID", filmValik);
                 DataTable tabel = new DataTable();
                 adapter.Fill(tabel);
                 read_kohad = new string[tabel.Rows.Count];
