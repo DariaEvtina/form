@@ -56,6 +56,7 @@ namespace MinuVorm
                 Size = new System.Drawing.Size(80, 25),
                 Text = "Kustutamine",
             };
+            film_kustuta.Click += Film_kustuta_Click;
             this.Controls.Add(film_kustuta);
 
             fail_lisa = new Button
@@ -74,7 +75,31 @@ namespace MinuVorm
             };
             this.Controls.Add(film_lisa);
             film_lisa.Click += Film_lisa_Click;
+            film_lisa.Visible = false;
+            film_kustuta.Visible = false;
+            fail_lisa.Visible = false;
         }
+
+        private void Film_kustuta_Click(object sender, EventArgs e)
+        {
+            if (film_txt.Text != "" && aasta_txt.Text != "" && poster_txt.Text != "" && poster.Image != null)
+            {
+                connect.Open();
+                command = new SqlCommand("DELETE FROM film WHERE Id_films=@id", connect);
+
+                command.Parameters.AddWithValue("@id", Id);
+                command.ExecuteNonQuery();
+                connect.Close();
+                ClearData();
+                Data();
+                MessageBox.Show("Andmed kustatud");
+            }
+            else
+            {
+                MessageBox.Show("Viga");
+            }
+        }
+
         int Id;
         private void Film_uuenda_Click(object sender, EventArgs e)
         {
@@ -107,13 +132,13 @@ namespace MinuVorm
         {
             OpenFileDialog open = new OpenFileDialog();
             open.Filter = "Image Files(*.jpeg;*.bmp;*.png;*.jpg)|*.jpeg;*.bmp;*.png;*.jpg";
-            open.InitialDirectory = Path.GetFullPath(@"C:\Users\marina.oleinik\Pictures\Filmid");//kust
+            open.InitialDirectory = Path.GetFullPath(@"C:\Users\opilane\Pictures\");//kust
             if (open.ShowDialog() == DialogResult.OK)
             {
                 save = new SaveFileDialog();
                 //save.FileName = poster_txt.Text;
                 save.Filter = "Image Files(*.jpeg;*.bmp;*.png;*.jpg)|*.jpeg;*.bmp;*.png;*.jpg";
-                save.InitialDirectory = Path.GetFullPath(@"..\..\Posterid");//kuhu
+                save.InitialDirectory = Path.GetFullPath(@"..\..\films");//kuhu
 
                 if (save.ShowDialog() == DialogResult.OK)
                 {
@@ -138,7 +163,7 @@ namespace MinuVorm
                 try
                 {
                     connect.Open();
-                    command = new SqlCommand("INSERT INTO Filmid(Filmi_nimetus,Aasta,Poster) VALUES(@film,@aasta,@poster)", connect);
+                    command = new SqlCommand("INSERT INTO film(nimetus,aeg,img) VALUES(@film,@aasta,@poster)", connect);
 
                     command.Parameters.AddWithValue("@film", film_txt.Text);
                     command.Parameters.AddWithValue("@aasta", aasta_txt.Text);
@@ -149,8 +174,8 @@ namespace MinuVorm
 
                     command.ExecuteNonQuery();
                     connect.Close();
-                    Data();
                     ClearData();
+                    Data();
                     MessageBox.Show("Andmed on lisatud");
                 }
                 catch (Exception)
@@ -171,7 +196,7 @@ namespace MinuVorm
             DataTable tabel_p = new DataTable();
             dataGridView_p = new DataGridView();
             DataSet dataset_p = new DataSet();
-            SqlDataAdapter adapter_p = new SqlDataAdapter("SELECT rida,koht,filmID,saal FROM [dbo].[piletid]; SELECT nimetus FROM [dbo].[film]", connect);
+            SqlDataAdapter adapter_p = new SqlDataAdapter("SELECT rida,koht,filmID,saalID FROM [dbo].[piletid]; SELECT nimetus FROM [dbo].[film]", connect);
 
             //adapter_p.TableMappings.Add("Piletid", "Rida");
             //adapter_p.TableMappings.Add("Filmid", "Filmi_nimetus");
@@ -205,13 +230,16 @@ namespace MinuVorm
             valju.Click += Valju_Click;
             this.Controls.Add(dataGridView_p);
             this.Controls.Add(com_f);
+            dataGridView_p.Visible = true;
+            com_f.Visible = true;
+            valju.Visible = true;
         }
 
         private void Valju_Click(object sender, EventArgs e)
         {
-            dataGridView_p.Hide();
-            com_f.Hide();
-            valju.Hide();
+            dataGridView_p.Visible = false;
+            com_f.Visible = false;
+            valju.Visible = false;
         }
 
         TextBox film_txt, aasta_txt, poster_txt;
@@ -238,19 +266,28 @@ namespace MinuVorm
             valjuf.Text = "Valju";
             valjuf.Click += Valjuf_Click;
             Data();
-            
+            dataGridView.Visible = true;
+            poster_txt.Visible = true;
+            aasta_txt.Visible = true;
+            film_kustuta.Visible = true;
+            film_lisa.Visible = true;
+            film_uuenda.Visible = true;
+            fail_lisa.Visible = true;
 
         }
 
         private void Valjuf_Click(object sender, EventArgs e)
         {
-            film_uuenda.Visible = false;
-            dataGridView.Visible=false;
-            poster.Hide();
-            film_txt.Hide();
-            aasta_txt.Hide();
-            poster_txt.Hide();
-            valjuf.Hide();
+            film_uuenda.Visible=false;
+            dataGridView.Visible = false;
+            poster.Visible = false;
+            film_txt.Visible = false;
+            aasta_txt.Visible = false;
+            poster_txt.Visible = false;
+            film_kustuta.Visible = false;
+            film_lisa.Visible = false;
+            fail_lisa.Visible = false;
+            valjuf.Visible = false;
         }
         public void Data()
         {

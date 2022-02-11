@@ -203,26 +203,33 @@ namespace MinuVorm
         private void Kino_btn_Click(object sender, EventArgs e)
         {
             Button btnClick = (Button)sender;
-            if (btnClick.Text == "saal 1")
+            if (filmID!=0)
             {
-                saal = 1;
-                MyForm uus_Aken = new MyForm(5, 5, filminimetus,saal,filmID);
-                uus_Aken.StartPosition = FormStartPosition.CenterScreen;
-                uus_Aken.ShowDialog();
+                if (btnClick.Text == "saal 1")
+                {
+                    saal = 1;
+                    MyForm uus_Aken = new MyForm(5, 5, filminimetus, saal, filmID);
+                    uus_Aken.StartPosition = FormStartPosition.CenterScreen;
+                    uus_Aken.ShowDialog();
+                }
+                else if (btnClick.Text == "saal 2")
+                {
+                    saal = 2;
+                    MyForm uus_Aken = new MyForm(10, 10, filminimetus, saal, filmID);
+                    uus_Aken.StartPosition = FormStartPosition.CenterScreen;
+                    uus_Aken.ShowDialog();
+                }
+                else if (btnClick.Text == "saal 3")
+                {
+                    saal = 3;
+                    MyForm uus_Aken = new MyForm(15, 15, filminimetus, saal, filmID);
+                    uus_Aken.StartPosition = FormStartPosition.CenterScreen;
+                    uus_Aken.ShowDialog();
+                }
             }
-            else if (btnClick.Text == "saal 2")
+            else
             {
-                saal = 2;
-                MyForm uus_Aken = new MyForm(10, 10, filminimetus,saal,filmID);
-                uus_Aken.StartPosition = FormStartPosition.CenterScreen;
-                uus_Aken.ShowDialog();
-            }
-            else if (btnClick.Text == "saal 3")
-            {
-                saal = 3;
-                MyForm uus_Aken = new MyForm(15, 15, filminimetus,saal, filmID);
-                uus_Aken.StartPosition = FormStartPosition.CenterScreen;
-                uus_Aken.ShowDialog();
+                MessageBox.Show("Vali filmi palun!");
             }
 
         }

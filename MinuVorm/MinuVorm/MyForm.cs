@@ -89,9 +89,9 @@ namespace MinuVorm
                 read_kohad = f.ReadToEnd().Split(';');
                 f.Close();*/
                 connect.Open();
-                adapter = new SqlDataAdapter("SELECT * FROM piletid WHERE saalID=@saalID ANF filmID=@filmID", connect);
-                command.Parameters.AddWithValue("@saalID", saalValik);
-                command.Parameters.AddWithValue("@filmID", filmValik);
+                adapter = new SqlDataAdapter("SELECT * FROM [dbo].[piletid] ", connect);//WHERE filmID=@film_ID WHERE filmID=@film AND saalID=@saal 
+                //command.Parameters.AddWithValue("@saal", saalValik);
+                //command.Parameters.AddWithValue("@film_ID", filmValik);
                 DataTable tabel = new DataTable();
                 adapter.Fill(tabel);
                 read_kohad = new string[tabel.Rows.Count];
@@ -172,19 +172,20 @@ namespace MinuVorm
             string text = "Sinu ost on \n";
             foreach (var item in piletid)
             {
-                text += "Pilet:\n" + "Rida: " + item.Rida + "Koht: " + item.Koht + "\n";
-                command = new SqlCommand("INSERT INTO piletid(rida,koht) VALUES(@rida,@koht)", connect);
+                text += "Pilet:\n" + "Rida: " + item.Rida + "Koht: " + item.Koht + "\n Film:"+film+" ja saal:"+saal;
+                command = new SqlCommand("INSERT INTO piletid(rida,koht,filmID,saalID) VALUES(@rida,@koht,@film,@saal)", connect);
                 command.Parameters.AddWithValue("@rida", item.Rida);
                 command.Parameters.AddWithValue("@koht", item.Koht);
                 command.Parameters.AddWithValue("@film", filmValik);
+                command.Parameters.AddWithValue("@saal", saalValik);
                 command.ExecuteNonQuery();
             }
             connect.Close();
 
             //message.Attachments.Add(new Attachment("file.pdf"));
-            string email = "programmeeriminetthk@gmail.com";
-            string password = "2.kuursus TARpv20";
-            SmtpClient client = new SmtpClient("catbrat02@gmail.com");
+            string email = "programmeeriminetthk2@gmail.com";
+            string password = "2.kuursus tarpv20";
+            SmtpClient client = new SmtpClient("smtp.gmail.com");
             client.Port = 587;
             client.Credentials = new NetworkCredential(email, password);
             client.EnableSsl = true;
@@ -194,8 +195,8 @@ namespace MinuVorm
             {
 
                 MailMessage message = new MailMessage();
-                message.To.Add(new MailAddress("programmeeriminetthk@gmail.com"));//kellele saada vaja küsida
-                message.From = new MailAddress("programmeeriminetthk@gmail.com");
+                message.To.Add(new MailAddress("programmeeriminetthk2@gmail.com"));//kellele saada vaja küsida
+                message.From = new MailAddress("programmeeriminetthk2@gmail.com");
                 message.Subject = "Ostetud piletid";
                 message.Body = text;
                 message.IsBodyHtml = true;
