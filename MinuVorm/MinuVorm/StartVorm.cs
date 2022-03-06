@@ -39,7 +39,7 @@ namespace MinuVorm
                 Text = "saal 1",
                 Location = new System.Drawing.Point(10, 50)
             };
-            Button kino1_btn = new Button
+            /*Button kino1_btn = new Button
             {
                 Size = new System.Drawing.Size(100, 30),
                 Text = "saal 2",
@@ -52,11 +52,11 @@ namespace MinuVorm
                 Location = new System.Drawing.Point(210, 50)
             };
             kino1_btn.Click += new EventHandler(Kino_btn_Click);
-            kino2_btn.Click += new EventHandler(Kino_btn_Click);
+            kino2_btn.Click += new EventHandler(Kino_btn_Click);*/
             kino_btn.Click += new EventHandler(Kino_btn_Click);
             this.Controls.Add(kino_btn);
-            this.Controls.Add(kino1_btn);
-            this.Controls.Add(kino2_btn);
+            /*this.Controls.Add(kino1_btn);
+            this.Controls.Add(kino2_btn);*/
             Label titl = new Label
             {
                 Text = "Kino Vorm",
@@ -71,7 +71,7 @@ namespace MinuVorm
                 Location = new Point(10, 100),
                 Font = new Font("Calibri", 16, FontStyle.Bold)
             };
-            Button left = new Button
+            /*Button left = new Button
             {
                 Text="<",
                 Location = new System.Drawing.Point(10, 130),
@@ -84,7 +84,7 @@ namespace MinuVorm
                 Size = new Size(20, 20),
             };
             right.Click += Right_Click;
-            left.Click += Left_Click;
+            left.Click += Left_Click;*/
             film = new Button
             {
                 Image = Image.FromFile(@"..\..\films\cats.png"),
@@ -92,17 +92,17 @@ namespace MinuVorm
                 Size = new Size(111, 138),
                 Name = "cats"
             };
-            film1 = new Button
+            /*film1 = new Button
             {
                 Image = Image.FromFile(@"..\..\films\nemo.png"),
                 Location = new System.Drawing.Point(140, 150),
                 Size = new Size(111, 138),
                 Name = "nemo"
-            };
+            };*/
             this.Controls.Add(film);
-            this.Controls.Add(film1);
+            /*this.Controls.Add(film1);
             this.Controls.Add(left);
-            this.Controls.Add(right);
+            this.Controls.Add(right);*/
             this.Controls.Add(titl);
             this.Controls.Add(titl2);
             film1.Click += new EventHandler(Film_Click);
